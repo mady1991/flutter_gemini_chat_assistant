@@ -1,0 +1,202 @@
+{
+  "issues": [
+    {
+      "id": "NT-101",
+      "category": "Notifications",
+      "title": "Push notifications not appearing on some devices",
+      "scenario": "Users report they stopped receiving promotional push alerts on Android 12.",
+      "rootCause": "Background notification permissions were revoked during OS upgrade.",
+      "solution": "Ask users to open App Settings → Notifications and enable all permissions.",
+      "keywords": ["notifications", "android", "permissions", "push", "missing"]
+    },
+    {
+      "id": "NT-102",
+      "category": "Notifications",
+      "title": "Duplicate notifications sent multiple times",
+      "scenario": "Several users receive the same push message 3–4 times.",
+      "rootCause": "A server retry loop caused repeated sends when the first delivery wasn’t acknowledged.",
+      "solution": "Add unique message IDs and deduplicate on the client side to prevent repeats.",
+      "keywords": ["push", "duplicate", "server", "retry", "notifications"]
+    },
+    {
+      "id": "UI-201",
+      "category": "UI",
+      "title": "Button text gets cut off on smaller screens",
+      "scenario": "On 5-inch devices, long labels on buttons are truncated unexpectedly.",
+      "rootCause": "Hardcoded button width in dp doesn’t scale properly.",
+      "solution": "Use `wrap_content` or flexible layout constraints to allow dynamic sizing.",
+      "keywords": ["ui", "button", "layout", "small screens", "truncate"]
+    },
+    {
+      "id": "UI-202",
+      "category": "UI",
+      "title": "Dark mode theme doesn’t apply to dialogs",
+      "scenario": "Even when the system theme is set to dark, pop-up dialogs remain in light mode.",
+      "rootCause": "Dialog theme is not inheriting the parent activity theme.",
+      "solution": "Wrap dialog builders with a dark mode theme context or update theme styles.",
+      "keywords": ["dark mode", "dialogs", "theme", "ui", "styles"]
+    },
+    {
+      "id": "PM-301",
+      "category": "Payments",
+      "title": "Card payment fails with generic error",
+      "scenario": "Some users encounter 'Payment Failed' without any clear reason.",
+      "rootCause": "The payment gateway returns a timeout error not handled gracefully.",
+      "solution": "Implement retry with exponential backoff and show descriptive error messages.",
+      "keywords": ["payment", "card", "timeout", "error", "gateway"]
+    },
+    {
+      "id": "PM-302",
+      "category": "Payments",
+      "title": "UPI transactions remain stuck in pending state",
+      "scenario": "UPI payments are initiated but never return a success or failure callback.",
+      "rootCause": "Webhooks were not properly configured for async confirmation.",
+      "solution": "Enable webhook endpoint and verify UPI callback flow to update transaction status.",
+      "keywords": ["upi", "payment", "pending", "transaction", "webhook"]
+    },
+    {
+      "id": "NW-401",
+      "category": "Network",
+      "title": "App fails to load content on weak connections",
+      "scenario": "Users on 2G or weak Wi-Fi get infinite spinners and no error feedback.",
+      "rootCause": "Timeout settings are too strict, leading to abrupt connection failures.",
+      "solution": "Increase connection timeout and show a proper retry or offline screen.",
+      "keywords": ["network", "timeout", "weak connection", "spinner", "offline"]
+    },
+    {
+      "id": "NW-402",
+      "category": "Network",
+      "title": "API calls occasionally return empty responses",
+      "scenario": "Random GET requests return HTTP 200 but with no data in the body.",
+      "rootCause": "Server load balancer forwards requests to a misconfigured instance.",
+      "solution": "Ensure all backend instances return proper payloads and monitor 200-empty anomalies.",
+      "keywords": ["api", "empty response", "load balancer", "backend", "network"]
+    },
+    {
+      "id": "AC-501",
+      "category": "Account",
+      "title": "Password reset link expired too quickly",
+      "scenario": "Users say the password reset link stops working within minutes.",
+      "rootCause": "Token expiry time is set to 5 minutes instead of intended 30.",
+      "solution": "Extend token validity and mention the expiry clearly in the email.",
+      "keywords": ["account", "password reset", "token", "expiry", "email"]
+    },
+    {
+      "id": "AC-502",
+      "category": "Account",
+      "title": "Unable to update email address",
+      "scenario": "Users attempting to change their email get 'Update Failed' errors.",
+      "rootCause": "Email uniqueness check was not case-insensitive.",
+      "solution": "Normalize email inputs to lowercase and re-run uniqueness check.",
+      "keywords": ["email", "account update", "uniqueness", "case sensitive"]
+    },
+    {
+      "id": "PF-601",
+      "category": "Performance",
+      "title": "App takes too long to start on low-end phones",
+      "scenario": "Some users experience startup times over 10 seconds.",
+      "rootCause": "Large asset files and synchronous DB migrations are blocking UI thread.",
+      "solution": "Defer non-critical initialization and enable lazy loading of assets.",
+      "keywords": ["performance", "startup time", "lazy loading", "assets", "low end devices"]
+    },
+    {
+      "id": "PF-602",
+      "category": "Performance",
+      "title": "Scrolling lags on product list screen",
+      "scenario": "Long product lists cause frame drops when scrolling quickly.",
+      "rootCause": "Inefficient image loading without caching.",
+      "solution": "Use proper image caching libraries and paginate the list.",
+      "keywords": ["scroll", "lag", "performance", "recyclerview", "images"]
+    },
+    {
+      "id": "DL-701",
+      "category": "Downloads",
+      "title": "File download never completes on mobile data",
+      "scenario": "Downloads pause randomly when the user switches from Wi-Fi to mobile data.",
+      "rootCause": "Download manager does not support network handover mid-transfer.",
+      "solution": "Implement download resume logic or ask users to retry on stable network.",
+      "keywords": ["download", "mobile data", "pause", "resume", "handover"]
+    },
+    {
+      "id": "DL-702",
+      "category": "Downloads",
+      "title": "Downloaded files are corrupted",
+      "scenario": "Some users cannot open downloaded files due to checksum mismatch.",
+      "rootCause": "Server occasionally sends incomplete file chunks under heavy load.",
+      "solution": "Enable checksum validation and auto-retry corrupted parts.",
+      "keywords": ["download", "corrupt", "checksum", "incomplete", "file"]
+    },
+    {
+      "id": "NT-103",
+      "category": "Notifications",
+      "title": "Notification sound plays twice",
+      "scenario": "On some Android phones, incoming alerts play sound twice rapidly.",
+      "rootCause": "Two receivers are registered for the same push event.",
+      "solution": "Unregister duplicate receivers and ensure singleton notification handler.",
+      "keywords": ["notifications", "sound", "duplicate", "android", "push"]
+    },
+    {
+      "id": "UI-203",
+      "category": "UI",
+      "title": "App logo appears blurry on high-resolution screens",
+      "scenario": "The splash logo is pixelated on tablets and large phones.",
+      "rootCause": "Low-density PNG used instead of vector drawable.",
+      "solution": "Replace bitmap with SVG/vector assets to support all screen densities.",
+      "keywords": ["ui", "logo", "blurry", "vector", "splash"]
+    },
+    {
+      "id": "PM-303",
+      "category": "Payments",
+      "title": "Refund status not updated in the app",
+      "scenario": "Refunds processed by the bank are not reflected in the user’s order history.",
+      "rootCause": "Missing refund webhook integration on the client side.",
+      "solution": "Add polling or webhook listener to sync refund status regularly.",
+      "keywords": ["refund", "payments", "order history", "webhook", "sync"]
+    },
+    {
+      "id": "NW-403",
+      "category": "Network",
+      "title": "Intermittent logout due to token refresh failure",
+      "scenario": "Users are logged out randomly after long idle periods.",
+      "rootCause": "Silent token refresh fails when device sleeps for extended time.",
+      "solution": "Handle refresh errors gracefully and prompt re-login only when necessary.",
+      "keywords": ["token", "network", "logout", "refresh", "authentication"]
+    },
+    {
+      "id": "AC-503",
+      "category": "Account",
+      "title": "Two-factor authentication SMS arrives very late",
+      "scenario": "Some users receive OTPs after 4–5 minutes delay.",
+      "rootCause": "Carrier network congestion during peak hours.",
+      "solution": "Offer alternate email or authenticator app for faster 2FA.",
+      "keywords": ["otp", "2fa", "sms delay", "authentication", "account"]
+    },
+    {
+      "id": "PF-603",
+      "category": "Performance",
+      "title": "Memory usage spikes after prolonged use",
+      "scenario": "App consumes 1.5GB+ RAM after being open for 1 hour.",
+      "rootCause": "Image caches are not cleared and views leak in backstack.",
+      "solution": "Use proper lifecycle scoping and clear caches on backgrounding.",
+      "keywords": ["memory leak", "performance", "ram usage", "cache", "lifecycle"]
+    },
+    {
+      "id": "DL-703",
+      "category": "Downloads",
+      "title": "Uploads fail on slow internet without warning",
+      "scenario": "User uploads time out silently on unstable connections.",
+      "rootCause": "No retry or timeout handling in upload service.",
+      "solution": "Add exponential retry and user-facing error messages for slow networks.",
+      "keywords": ["upload", "timeout", "slow internet", "network error"]
+    },
+    {
+      "id": "UI-204",
+      "category": "UI",
+      "title": "Text overlaps on language switch",
+      "scenario": "Switching from English to Arabic causes text to overflow and overlap.",
+      "rootCause": "Layouts aren’t RTL-aware and use fixed positions.",
+      "solution": "Use `start`/`end` constraints and enable RTL support in manifest.",
+      "keywords": ["ui", "rtl", "arabic", "layout", "overlap"]
+    }
+  ]
+}

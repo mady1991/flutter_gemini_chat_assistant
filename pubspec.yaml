@@ -1,0 +1,63 @@
+name: static_chat_assitant
+description: "A new Flutter project."
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.9.2 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+  cached_network_image: ^3.3.0
+  flutter_spinkit: ^5.2.1
+  string_similarity: ^2.1.1
+  image_picker: ^0.8.7+5
+  provider: ^6.1.2
+  url_launcher: ^6.3.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
+
+
+  assets:
+    - assets/
+    - assets/fonts/
+
+  fonts:
+    - family: CoTextTrial
+      fonts:
+        - asset: assets/fonts/CoTextTrial-Light.ttf
+        - asset: assets/fonts/CoTextTrial-Regular.ttf
+        - asset: assets/fonts/CoTextTrial-Bold.ttf
+    - family: BebasNeue
+      fonts:
+        - asset: assets/fonts/BebasNeue-Regular.ttf
+    - family: D-DINCondensed
+      fonts:
+        - asset: assets/fonts/D-DINCondensed-Regular.ttf
+    - family: Montserrat
+      fonts:
+        - asset: assets/fonts/Montserrat-Regular.ttf
+    - family: SFProText
+      fonts:
+        - asset: assets/fonts/SFProText-Semibold.ttf
+    - family: DINCondensed
+      fonts:
+        - asset: assets/fonts/D-DINCondensed.otf
+        - asset: assets/fonts/D-DINCondensed-Bold.otf
+          weight: 700
+    - family: Lato
+      fonts:
+        - asset: assets/fonts/Lato-Regular.ttf
+        - asset: assets/fonts/Lato-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Lato-Light.ttf
+          weight: 300
