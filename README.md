@@ -47,13 +47,13 @@ lib/
 ## 📸 Screenshots
 
 ### 1️⃣ Initial Chat Screen with Suggestions
-![Chat Assistant Initial](assets/one-portrait.png)
+<img src="assets/one-portrait.png" alt="Chat Assistant Initial" width="300"/>
 
 ### 2️⃣ Category & Suggestions Display
-![Chat Assistant Category](assets/four-portrait.png)
+<img src="assets/four-portrait.png" alt="Chat Assistant Category" width="300"/>
 
 ### 3️⃣ Fallback with FAQ, Contact Us, Raise Request Options
-![Chat Assistant Fallback](assets/six-portrait.png)
+<img src="assets/six-portrait.png" alt="Chat Assistant Fallback" width="300"/>
 
 ---
 
