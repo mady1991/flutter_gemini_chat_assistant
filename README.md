@@ -50,10 +50,13 @@ lib/
 <img src="assets/one-portrait.png" alt="Chat Assistant Initial" width="300"/>
 
 ### 2️⃣ Category & Suggestions Display
+<img src="assets/two-portrait.png" alt="Chat Assistant Category" width="300"/>
+<img src="assets/three-portrait.png" alt="Chat Assistant Category" width="300"/>
 <img src="assets/four-portrait.png" alt="Chat Assistant Category" width="300"/>
 
 ### 3️⃣ Fallback with FAQ, Contact Us, Raise Request Options
 <img src="assets/six-portrait.png" alt="Chat Assistant Fallback" width="300"/>
+<img src="assets/seven-portrait.png" alt="Chat Assistant Fallback" width="300"/>
 
 ---
 
