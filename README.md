@@ -66,10 +66,10 @@ A Flutter-based intelligent assistant application that combines static JSON know
 <img src="assets/screenshots/two.png" alt="App Assistant" width="300"/> <img src="assets/screenshots/categories.png" alt="Categories" width="300"/>
 
 🤖 **AI Assistant - Gemini AI**  
-<img src="assets/screenshots/gem_one.png" alt="AI Assistant" width="300"/>
+<img src="assets/screenshots/gem_three.png" alt="AI Assistant" width="300"/>
 
 🔄 **Hybrid Assistant - Smart Routing**  
-<img src="assets/screenshots/hybrid_one.png" alt="Hybrid Local Response" width="300"/> <img src="assets/screenshots/hybrid_ai.png" alt="Hybrid AI Response" width="300"/>
+<img src="assets/screenshots/hybrid_three.png" alt="Hybrid Local Response" width="300"/> <img src="assets/screenshots/hybrid_ai.png" alt="Hybrid AI Response" width="300"/>
 
 ---
 
