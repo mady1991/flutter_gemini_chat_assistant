@@ -1,97 +1,161 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:static_chat_assitant/gen_ai/screens/home_screen.dart';
+import 'gen_ai/providers/chat_provider.dart';
+import 'gen_ai/providers/settings_provider.dart';
+import 'assistant/ui/app_assistant.dart'; // Your static assistant
+import 'gen_ai/themes/my_theme.dart';
+import 'hybrid/hybrid_chat_screen.dart';
 
-import 'assistant/ui/app_assistant.dart';
-import 'assistant/utils/FloatingGifIcon.dart';
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await ChatProvider.initHive();
 
-void main() {
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => ChatProvider()),
+        ChangeNotifierProvider(create: (context) => SettingsProvider()),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    _setTheme();
+    super.initState();
+  }
+
+  void _setTheme() {
+    final settingsProvider = context.read<SettingsProvider>();
+    settingsProvider.getSavedSettings();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-      ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      title: 'Smart Assistant Pro',
+      theme: context.watch<SettingsProvider>().isDarkMode
+          ? darkTheme
+          : lightTheme,
+      debugShowCheckedModeBanner: false,
+      home: const HybridChatHome(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({super.key, required this.title});
 
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-  bool _isExpanded = false;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
+class HybridChatHome extends StatelessWidget {
+  const HybridChatHome({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Stack(
-          children: [
-            const Text('You have pushed the button this many times:'),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
+        title: const Text('Smart Assistant Pro'),
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Colors.white,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
         ),
       ),
-      floatingActionButton: GestureDetector(
-        onTap: _handleTap,
-        child: const FloatingGifIcon(size: 60, cornerRadiusFraction: 0.5),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Theme.of(context).colorScheme.primary.withOpacity(0.05),
+              Theme.of(context).colorScheme.background,
+            ],
+          ),
+        ),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // App Assistant (Static JSON)
+              _buildAssistantCard(
+                context,
+                'Local App Assistant',
+                'Pre-defined solutions for common app issues',
+                Icons.support_agent,
+                () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AppAssistant()),
+                ),
+              ),
+
+              const SizedBox(height: 20),
+
+              // AI Assistant (Gemini)
+              _buildAssistantCard(
+                context,
+                'Gemini AI Assistant',
+                'Gemini assistant for your normal question',
+                Icons.star,
+                () {
+                  final chatProvider = context.read<ChatProvider>();
+                  chatProvider.prepareChatRoom(isNewChat: true, chatID: '');
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const HomeScreen()),
+                  );
+                },
+              ),
+              const SizedBox(height: 20),
+              _buildAssistantCard(
+                context,
+                'Hybrid Assistant',
+                'Advanced AI help for complex questions',
+                Icons.smart_toy,
+                () {
+                  final chatProvider = context.read<ChatProvider>();
+                  chatProvider.prepareChatRoom(isNewChat: true, chatID: '');
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const HybridChatScreen(),
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
-  void _handleTap() {
-    showChatAssistant();
-  }
-
-  showChatAssistant() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => AppAssistant()),
+  Widget _buildAssistantCard(
+    BuildContext context,
+    String title,
+    String subtitle,
+    IconData icon,
+    VoidCallback onTap,
+  ) {
+    return Card(
+      margin: const EdgeInsets.symmetric(horizontal: 20),
+      child: ListTile(
+        leading: Icon(icon, size: 40, color: Theme.of(context).primaryColor),
+        title: Text(
+          title,
+          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
+        subtitle: Text(subtitle),
+        trailing: const Icon(Icons.arrow_forward_ios),
+        onTap: onTap,
+      ),
     );
   }
 }

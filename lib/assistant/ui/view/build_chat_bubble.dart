@@ -1,4 +1,3 @@
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import '../../utils/con_fonts.dart';
@@ -40,7 +39,12 @@ class _ChatBubbleState extends State<ChatBubble> {
           if (!widget.isUser)
             CircleAvatar(
               backgroundColor: Colors.white,
-              child: Image.asset('assets/ic_launcher.png'),
+              radius: 18,
+              child: Image.asset(
+                'assets/ic_launcher.png',
+                height: 16,
+                width: 16,
+              ),
             ),
           if (widget.isUser) const SizedBox(width: 40.0),
           Expanded(
@@ -55,9 +59,29 @@ class _ChatBubbleState extends State<ChatBubble> {
                     padding: const EdgeInsets.all(12.0),
                     decoration: BoxDecoration(
                       color: widget.isUser
-                          ? Colors.grey
-                          : Colors.grey.shade200,
-                      borderRadius: BorderRadius.circular(8.0),
+                          ? Theme.of(context).colorScheme.primary
+                          : Colors.green.shade50,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(widget.isUser ? 20 : 0),
+                        topRight: Radius.circular(widget.isUser ? 0 : 20),
+                        bottomLeft: const Radius.circular(20),
+                        bottomRight: const Radius.circular(20),
+                      ),
+                      border: Border.all(
+                        color: widget.isUser
+                            ? Theme.of(
+                                context,
+                              ).colorScheme.primary.withOpacity(0.2)
+                            : Colors.purple.withOpacity(0.2),
+                        width: 1,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.05),
+                          blurRadius: 8,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -70,7 +94,8 @@ class _ChatBubbleState extends State<ChatBubble> {
                                     width: 20.0,
                                     height: 20.0,
                                     child: CircularProgressIndicator(
-                                        strokeWidth: 2.0),
+                                      strokeWidth: 2.0,
+                                    ),
                                   ),
                                   const SizedBox(width: 10.0),
                                   Text(
@@ -90,7 +115,7 @@ class _ChatBubbleState extends State<ChatBubble> {
                                 style: FormattingUtils.getTextStyle(
                                   color: widget.isUser
                                       ? Colors.white
-                                      :Colors.black,
+                                      : Colors.black,
                                   fontSize: AppFonts.FontSize_14,
                                   height: 1.3,
                                   fontFamily: AppFonts.FontDDINCondensed,
@@ -111,20 +136,20 @@ class _ChatBubbleState extends State<ChatBubble> {
                                   borderRadius: BorderRadius.circular(8),
                                   child:
                                       checkNetworkImage(widget.images![index])
-                                          ? CachedNetworkImage(
-                                              height: 150,
-                                              fit: BoxFit.fill,
-                                              width: 200,
-                                              imageUrl: widget.images![index],
-                                              placeholder: (context, url) =>
-                                                  createProgressIndicator(),
-                                            )
-                                          : Image.asset(
-                                              widget.images![index],
-                                              width: 150,
-                                              height: 200,
-                                              fit: BoxFit.fill,
-                                            ),
+                                      ? CachedNetworkImage(
+                                          height: 150,
+                                          fit: BoxFit.fill,
+                                          width: 200,
+                                          imageUrl: widget.images![index],
+                                          placeholder: (context, url) =>
+                                              createProgressIndicator(),
+                                        )
+                                      : Image.asset(
+                                          widget.images![index],
+                                          width: 150,
+                                          height: 200,
+                                          fit: BoxFit.fill,
+                                        ),
                                 );
                               },
                             ),
@@ -143,9 +168,12 @@ class _ChatBubbleState extends State<ChatBubble> {
                                 onPressed: () {
                                   context
                                       .findAncestorStateOfType<
-                                          AppAssistantState>()
-                                      ?.moreOption(widget.action!.toUpperCase(),
-                                          widget.action!);
+                                        AppAssistantState
+                                      >()
+                                      ?.moreOption(
+                                        widget.action!.toUpperCase(),
+                                        widget.action!,
+                                      );
                                   setState(() {
                                     pressOnce = true; // disable after press
                                   });
@@ -154,7 +182,7 @@ class _ChatBubbleState extends State<ChatBubble> {
                               ),
                             ),
                           ),
-                        ]
+                        ],
                       ],
                     ),
                   ),
@@ -174,8 +202,13 @@ class _ChatBubbleState extends State<ChatBubble> {
           ),
           if (widget.isUser)
             CircleAvatar(
-              backgroundColor: Colors.black,
-              child: Image.asset('assets/ic_my_profile.png'),
+              backgroundColor: Theme.of(context).colorScheme.primary,
+              radius: 18,
+              child: Image.asset(
+                'assets/ic_my_profile.png',
+                height: 16,
+                width: 16,
+              ),
             ),
         ],
       ),

@@ -14,10 +14,7 @@ import 'assistant_chat_message.dart';
 import 'view/form_widget.dart';
 
 class AppAssistant extends StatefulWidget {
-
-
-  AppAssistant({super.key}) {
-  }
+  AppAssistant({super.key}) {}
 
   @override
   AppAssistantState createState() => AppAssistantState();
@@ -28,7 +25,6 @@ class AppAssistantState extends State<AppAssistant> {
   final TextEditingController _textController = TextEditingController();
   final FocusNode _focusNode = FocusNode();
   final ScrollController _scrollController = ScrollController();
-
 
   List<Issue> _issues = [];
   bool textIsThere = false;
@@ -58,19 +54,28 @@ class AppAssistantState extends State<AppAssistant> {
     super.initState();
     getAllData();
     showMainCategoryWithMessage(
-        "Hello! I'm your App Assistant. I can help you troubleshoot issues with FacePass, tickets, and other app features. How can I help you today?",
-        false);
+      "Hello! I'm your App Assistant. I can help you troubleshoot issues with FacePass, tickets, and other app features. How can I help you today?",
+      false,
+    );
   }
 
-  void _addMessage(String text, bool isUser,
-      {bool isTyping = false, images = null, action = null}) {
+  void _addMessage(
+    String text,
+    bool isUser, {
+    bool isTyping = false,
+    images = null,
+    action = null,
+  }) {
     setState(() {
-      _messages.add(AssistantChatMessage(
+      _messages.add(
+        AssistantChatMessage(
           text: text,
           isUser: isUser,
           isTyping: isTyping,
           images: images,
-          action: action));
+          action: action,
+        ),
+      );
     });
     _scrollToBottom();
   }
@@ -89,12 +94,14 @@ class AppAssistantState extends State<AppAssistant> {
 
   void _showSuggestions() {
     setState(() {
-      _messages.add(AssistantChatMessage(
-        text: "",
-        isUser: false,
-        isSuggestion: isSuggestion,
-        suggestions: _suggestions,
-      ));
+      _messages.add(
+        AssistantChatMessage(
+          text: "",
+          isUser: false,
+          isSuggestion: isSuggestion,
+          suggestions: _suggestions,
+        ),
+      );
     });
     _scrollToBottom();
   }
@@ -169,18 +176,17 @@ class AppAssistantState extends State<AppAssistant> {
     if (matchedIssues.isNotEmpty) {
       _dontUnderstandCounter = 0; // reset counter on match
       Issue issue = matchedIssues.first;
-      String response = "I found this issue that might help:\n\n"
+      String response =
+          "I found this issue that might help:\n\n"
           "📱 *${issue.title}*\n\n\n"
           //"🔍 *Root Cause:*\n${issue.rootCause}\n\n"
           "✅ *Solution:*\n${issue.solution}";
-      _addMessage(response, false,
-          images: issue.imageList, action: issue.action);
-
-      // if (matchedIssues.length > 1) {
-      //   _addMessage(
-      //       "I found ${matchedIssues.length} possible issues. Would you like to see more?",
-      //       false);
-      // }
+      _addMessage(
+        response,
+        false,
+        images: issue.imageList,
+        action: issue.action,
+      );
     } else {
       //In case if user input not exactly matches with any issues but it contain in some Issues keywords
       // Show suggestions again after response
@@ -189,9 +195,10 @@ class AppAssistantState extends State<AppAssistant> {
         isSuggestion = true;
         _dontUnderstandCounter = 0;
         _addMessage(
-            "I've not found any issues that match '${lowerText}' "
-            "But I found some possible issues that might help:",
-            false);
+          "I've not found any issues that match '${lowerText}' "
+          "But I found some possible issues that might help:",
+          false,
+        );
         _showSuggestions();
       } else {
         _dontUnderstandCounter++;
@@ -199,17 +206,18 @@ class AppAssistantState extends State<AppAssistant> {
           _dontUnderstandCounter = 0;
           //showRaiseTicket = true;
           _addMessage(
-              "I'm still having trouble understanding your issue. Here are a few options you can explore that might help:",
-              false);
-          _messages.add(AssistantChatMessage(
-            text: "moreoptions",
-            isUser: false,
-          ));
+            "I'm still having trouble understanding your issue. Here are a few options you can explore that might help:",
+            false,
+          );
+          _messages.add(
+            AssistantChatMessage(text: "moreoptions", isUser: false),
+          );
         } else {
           _addMessage(
-              "I'm not sure I understand. Could you describe your issue in different words? "
-              "Try mentioning words like: internet, facepass, face, ticket, enrollment, etc.",
-              false);
+            "I'm not sure I understand. Could you describe your issue in different words? "
+            "Try mentioning words like: internet, facepass, face, ticket, enrollment, etc.",
+            false,
+          );
         }
       }
     }
@@ -248,84 +256,122 @@ class AppAssistantState extends State<AppAssistant> {
         .toList();
   }
 
-
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.background,
       appBar: getAppBarView(
-          context: context,
-          title: 'App Assistant'.toUpperCase()),
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-              controller: _scrollController,
-              itemCount: _messages.length,
-              itemBuilder: (context, index) => _messages[index],
-            ),
+        context: context,
+        title: 'App Assistant'.toUpperCase(),
+      ),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Theme.of(context).colorScheme.primary.withOpacity(0.05),
+              Theme.of(context).colorScheme.background,
+            ],
           ),
-          const Divider(height: 1.0),
-          Container(
-            decoration: BoxDecoration(
-              color: Theme.of(context).cardColor,
+        ),
+        child: Column(
+          children: [
+            Expanded(
+              child: ListView.builder(
+                controller: _scrollController,
+                itemCount: _messages.length,
+                itemBuilder: (context, index) => _messages[index],
+              ),
             ),
-            child: _buildTextComposer(),
-          ),
-        ],
+            //const Divider(height: 1.0),
+            _buildTextComposer(),
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildTextComposer() {
     return Container(
-      height: 60,
-      margin: const EdgeInsets.symmetric(horizontal: 12),
+      height: 70,
+      padding: EdgeInsets.symmetric(horizontal: 8.0),
+      decoration: BoxDecoration(
+        color: Theme.of(context).cardColor.withOpacity(0.9),
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 20,
+            offset: const Offset(0, -5),
+          ),
+        ],
+      ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Visibility(
             visible: mainMenuIcon,
             child: IconButton(
-              icon: const Icon(
-                Icons.category,
-                color: Colors.black87,
-              ),
+              icon: const Icon(Icons.category, color: Colors.black87),
               onPressed: () {
                 showMainCategoryWithMessage("Main Categories", true);
               },
             ),
           ),
           Expanded(
-            child: TextField(
-              controller: _textController,
-              onChanged: (text) {
-                setState(() => textIsThere = text.isNotEmpty);
-              },
-              onSubmitted: _handleSubmitted,
-              focusNode: _focusNode,
-              style: TextStyle(
-                fontFamily: AppFonts.FontDDINCondensed,
-                fontSize: AppFonts.FontSize_18,
-                color: Colors.black,
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 16.0),
+              decoration: BoxDecoration(
+                color: Theme.of(context).scaffoldBackgroundColor,
+                borderRadius: BorderRadius.circular(25),
+                border: Border.all(
+                  color: Theme.of(context).dividerColor.withOpacity(0.5),
+                ),
               ),
-              decoration: const InputDecoration.collapsed(
-                  hintText: "Type your issue here...",
+              child: TextField(
+                controller: _textController,
+                onChanged: (text) {
+                  setState(() => textIsThere = text.isNotEmpty);
+                },
+                onSubmitted: _handleSubmitted,
+                focusNode: _focusNode,
+                style: TextStyle(
+                  fontFamily: AppFonts.FontDDINCondensed,
+                  fontSize: AppFonts.FontSize_18,
+                  color: Colors.black,
+                ),
+                // decoration: const InputDecoration.collapsed(
+                //   hintText: "Type your issue here...",
+                //   hintStyle: TextStyle(
+                //     fontSize: AppFonts.FontSize_18,
+                //     color: Colors.grey,
+                //     fontFamily: AppFonts.FontDDINCondensed,
+                //   ),
+                // ),
+                decoration: InputDecoration(
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
+                  ),
+                  border: InputBorder.none,
+                  hintText: 'Type your issue here...',
                   hintStyle: TextStyle(
-                    fontSize: AppFonts.FontSize_18,
-                    color: Colors.grey,
-                    fontFamily: AppFonts.FontDDINCondensed,
-                  )),
+                    color: Theme.of(context).hintColor,
+                    fontSize: 16,
+                  ),
+                ),
+              ),
             ),
           ),
           Visibility(
             //visible: textIsThere,
             visible: true,
             child: IconButton(
-              icon: const Icon(
-                Icons.send,
-                color:Colors.black54,
-              ),
+              icon: const Icon(Icons.send, color: Colors.black54),
               onPressed: () => _handleSubmitted(_textController.text),
             ),
           ),
@@ -342,13 +388,15 @@ class AppAssistantState extends State<AppAssistant> {
   }
 
   void getAllData() async {
-    String jsonString =
-        await rootBundle.loadString('assets/app_full_issues.json');
+    String jsonString = await rootBundle.loadString(
+      'assets/app_full_issues.json',
+    );
     final Map<String, dynamic> data = json.decode(jsonString);
     final List<dynamic> issuesJson = data['issues'];
 
     _issues = issuesJson
-        .map<Issue>((issue) => Issue(
+        .map<Issue>(
+          (issue) => Issue(
             id: issue['id'],
             category: issue['category'],
             title: issue['title'],
@@ -359,7 +407,9 @@ class AppAssistantState extends State<AppAssistant> {
             keywords: List<String>.from(issue['keywords']),
             imageList: issue['imageList'] != null
                 ? List<String>.from(issue['imageList'])
-                : null))
+                : null,
+          ),
+        )
         .toList();
     _suggestions = getRandomItems(_issues, 5);
     categoryList = groupIssuesByCategory(_issues);
@@ -379,13 +429,15 @@ class AppAssistantState extends State<AppAssistant> {
       mainMenuIcon = false;
       _messages.removeWhere((message) => message.isCategoryView);
       _messages.removeWhere((message) => message.text == "form");
-      _messages.add(AssistantChatMessage(
-        text: "",
-        isUser: false,
-        isCategoryView: true,
-        mainCategoryView: true,
-        categoryList: categoryList,
-      ));
+      _messages.add(
+        AssistantChatMessage(
+          text: "",
+          isUser: false,
+          isCategoryView: true,
+          mainCategoryView: true,
+          categoryList: categoryList,
+        ),
+      );
     });
     _scrollToBottom();
   }
@@ -396,14 +448,16 @@ class AppAssistantState extends State<AppAssistant> {
       mainMenuIcon = true;
       _messages.removeWhere((message) => message.isCategoryView);
 
-      _messages.add(AssistantChatMessage(
-        text: "",
-        isUser: false,
-        isCategoryView: true,
-        mainCategoryView: false,
-        categoryList: categoryList,
-        selectedCategory: category,
-      ));
+      _messages.add(
+        AssistantChatMessage(
+          text: "",
+          isUser: false,
+          isCategoryView: true,
+          mainCategoryView: false,
+          categoryList: categoryList,
+          selectedCategory: category,
+        ),
+      );
     });
     _scrollToBottom();
   }
@@ -412,10 +466,7 @@ class AppAssistantState extends State<AppAssistant> {
     setState(() {
       mainMenuIcon = true;
       _messages.removeWhere((message) => message.text == "moreoptions");
-      _messages.add(AssistantChatMessage(
-        text: txt,
-        isUser: true,
-      ));
+      _messages.add(AssistantChatMessage(text: txt, isUser: true));
     });
     _scrollToBottom();
     //performaction
@@ -428,18 +479,15 @@ class AppAssistantState extends State<AppAssistant> {
     //performaction
     switch (action) {
       case "contact_us":
-        showPage( ContactUsPage());
+        showPage(ContactUsPage());
         break;
       case "faq":
-        showPage( FaqList());
+        showPage(FaqList());
         break;
       case "form":
         setState(() {
           showRaiseTicket = true;
-          _messages.add(AssistantChatMessage(
-            text: "form",
-            isUser: false,
-          ));
+          _messages.add(AssistantChatMessage(text: "form", isUser: false));
         });
         _scrollToBottom();
         break;
@@ -449,11 +497,8 @@ class AppAssistantState extends State<AppAssistant> {
     }
   }
 
-  showPage( var page) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => page),
-    );
+  showPage(var page) {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => page));
   }
 
   void submitForm() {
@@ -462,8 +507,9 @@ class AppAssistantState extends State<AppAssistant> {
       showRaiseTicket = false;
       _messages.removeWhere((message) => message.text == "form");
       _addMessage(
-          "✅ Your ticket has been successfully submitted. Our team will contact you soon.",
-          false);
+        "✅ Your ticket has been successfully submitted. Our team will contact you soon.",
+        false,
+      );
     });
     _scrollToBottom();
   }

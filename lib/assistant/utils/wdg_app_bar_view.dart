@@ -18,16 +18,17 @@ getAppBarView({
   centerTitle: true,
   shadowColor: color,
   elevation: hasActions ? 0 : elevation,
-  backgroundColor: color,
+  backgroundColor: Theme.of(context).colorScheme.primary,
+  foregroundColor: Colors.white,
+  shape: const RoundedRectangleBorder(
+    borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
+  ),
   leading: hideLeading
       ? IconButton(
           onPressed: () {
-              Navigator.of(context).pop();
+            Navigator.of(context).pop();
           },
-          icon: Icon(
-            Icons.arrow_back_sharp,
-            color:  Colors.black,
-          ),
+          icon: Icon(Icons.arrow_back_sharp, color: Colors.white),
         )
       : Icon(null),
   title: title is String
@@ -35,7 +36,7 @@ getAppBarView({
           title,
           style: TextStyle(
             fontSize: AppFonts.FontSize_22,
-            color: Colors.black,
+            color: Colors.white,
             fontFamily: AppFonts.FontBebasNeue,
             letterSpacing: 1.5,
             fontWeight: FontWeight.normal,
@@ -49,11 +50,7 @@ getAppBarView({
             child: IconButton(
               iconSize: 45,
               icon: icon != null
-                  ? Icon(
-                      icon,
-                      size: 28,
-                      color: Colors.black,
-                    )
+                  ? Icon(icon, size: 28, color: Colors.white)
                   : Image.asset(assetImage, width: 45, height: 45),
               onPressed: callback,
             ),

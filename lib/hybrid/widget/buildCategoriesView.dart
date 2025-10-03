@@ -1,50 +1,47 @@
+
 import 'package:flutter/material.dart';
 
-import '../../utils/con_fonts.dart';
-import '../../utils/utl_formatting.dart';
-import '../app_assistant.dart';
-
-Widget buildCategories(BuildContext context) {
+Widget buildCategoriesView(BuildContext context, void Function(String category) handleCategoryTap) {
   final categories = [
     {
       "icon": Icons.notifications_active,
       "title": "Notifications",
-      "subtitle": "Manage push alerts, sounds, and in-app messages."
+      "subtitle": "Manage push alerts, sounds, and in-app messages.",
     },
     {
       "icon": Icons.design_services,
       "title": "UI / UX",
-      "subtitle": "Handle layout issues, dark mode, and display adjustments."
+      "subtitle": "Handle layout issues, dark mode, and display adjustments.",
     },
     {
       "icon": Icons.payment,
       "title": "Payments",
-      "subtitle": "Troubleshoot card, UPI, and refund related problems."
+      "subtitle": "Troubleshoot card, UPI, and refund related problems.",
     },
     {
       "icon": Icons.wifi,
       "title": "Network",
-      "subtitle": "Fix API errors, connection issues, and timeouts."
+      "subtitle": "Fix API errors, connection issues, and timeouts.",
     },
     {
       "icon": Icons.account_circle,
       "title": "Account",
-      "subtitle": "Manage login, email updates, and security settings."
+      "subtitle": "Manage login, email updates, and security settings.",
     },
     {
       "icon": Icons.speed,
       "title": "Performance / Battery",
-      "subtitle": "Resolve app slowness, lag, and excessive battery use."
+      "subtitle": "Resolve app slowness, lag, and excessive battery use.",
     },
     {
       "icon": Icons.cloud_download,
       "title": "Downloads / Uploads",
-      "subtitle": "Handle file transfer issues, pauses, or corrupt files."
+      "subtitle": "Handle file transfer issues, pauses, or corrupt files.",
     },
     {
       "icon": Icons.extension,
       "title": "Miscellaneous Edge Cases",
-      "subtitle": "Other rare or complex issues not covered above."
+      "subtitle": "Other rare or complex issues not covered above.",
     },
   ];
 
@@ -55,12 +52,10 @@ Widget buildCategories(BuildContext context) {
       children: [
         Text(
           "Please choose a category:",
-          style: FormattingUtils.getTextStyle(
-            color: Colors.black,
-            fontSize: AppFonts.FontSize_16,
-            fontWeight: AppFonts.FontWeight_bold,
-            height: 1.3,
-            fontFamily: AppFonts.FontDDINCondensed,
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onSurface,
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
           ),
         ),
         const SizedBox(height: 20),
@@ -68,9 +63,7 @@ Widget buildCategories(BuildContext context) {
           children: List.generate(categories.length, (index) {
             final item = categories[index];
             return InkWell(
-              onTap: () => context
-                  .findAncestorStateOfType<AppAssistantState>()
-                  ?.showIssuesForCategory(item["title"] as String),
+              onTap: () => handleCategoryTap(item["title"] as String),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -78,49 +71,48 @@ Widget buildCategories(BuildContext context) {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Circle Icon
                       Container(
                         width: 40,
                         height: 40,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           border: Border.all(
-                            color: Theme.of(context).colorScheme.primary, // border color
-                            width: 2, // border thickness
+                            color: Theme.of(context).colorScheme.primary,
+                            width: 2,
                           ),
                         ),
                         child: Center(
                           child: Icon(
                             item["icon"] as IconData,
                             color: Theme.of(context).colorScheme.primary,
-                            // same as border color
                             size: 20,
                           ),
                         ),
                       ),
                       const SizedBox(width: 12),
-                      // Title + Subtitle
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              item["title"].toString().toUpperCase() ,
-                              style: FormattingUtils.getTextStyle(
-                                color: Colors.black,
-                                fontSize: AppFonts.FontSize_15,
+                              item["title"].toString().toUpperCase(),
+                              style: TextStyle(
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.onSurface,
+                                fontSize: 15,
                                 height: 1.3,
-                                fontWeight: AppFonts.FontWeight_bold,
-                                fontFamily: AppFonts.FontDDINCondensed,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
                             const SizedBox(height: 2),
                             Text(
                               item["subtitle"] as String,
-                              style: FormattingUtils.getTextStyle(
-                                color: Colors.grey[600]!,
-                                fontSize: AppFonts.FontSize_13,
-                                fontFamily: AppFonts.FontDDINCondensed,
+                              style: TextStyle(
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.onSurface.withOpacity(0.6),
+                                fontSize: 13,
                                 height: 1.3,
                               ),
                             ),
@@ -134,7 +126,7 @@ Widget buildCategories(BuildContext context) {
                       margin: const EdgeInsets.only(left: 20),
                       height: 15,
                       width: 1.5,
-                      color: Theme.of(context).colorScheme.primary,
+                      color: Theme.of(context).dividerColor,
                     ),
                 ],
               ),
